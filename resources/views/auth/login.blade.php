@@ -1,47 +1,69 @@
-<x-guest-layout>
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login — Digital Signature SK Penugasan</title>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+</head>
+<body class="min-h-screen flex flex-col" style="background-color:#1e3a5f">
 
-    <form method="POST" action="{{ route('login') }}">
-        @csrf
+    {{-- Header --}}
+    <header class="flex items-center justify-between px-8 py-4 bg-white border-b border-gray-200">
+        <span class="font-black text-sm tracking-wide" style="color:#1e3a5f">
+            APLIKASI DIGITAL SIGNATURE SK PENUGASAN
+        </span>
+        <a href="{{ route('verifikasi') }}"
+           class="px-5 py-2 rounded-lg text-sm font-bold text-white transition hover:opacity-90"
+           style="background-color:#9b1c1c">
+            ← Kembali
+        </a>
+    </header>
 
-        <!-- username Address -->
-        <div>
-            <x-input-label for="username" :value="__('username')" />
-            <x-text-input id="username" class="block mt-1 w-full" type="username" name="username" :value="old('username')" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('username')" class="mt-2" />
+    {{-- Login Card --}}
+    <div class="flex-1 flex items-center justify-center p-6">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-8">
+            <h2 class="text-2xl font-black text-center mb-8" style="color:#1e3a5f">Selamat Datang</h2>
+
+            <form method="POST" action="{{ route('login') }}" class="space-y-5">
+                @csrf
+
+                {{-- Username --}}
+                <div>
+                    <label class="block text-sm font-semibold mb-1.5" style="color:#1e3a5f">Username</label>
+                    <input type="text" name="username" value="{{ old('username') }}" required autofocus
+                           class="w-full px-4 py-3 rounded-lg border text-sm focus:outline-none focus:ring-2 transition
+                                  {{ $errors->has('username') ? 'border-red-500 focus:ring-red-300' : 'border-gray-200 focus:ring-blue-300' }}"
+                           style="background-color:#f1f5f9">
+                    @error('username')
+                        <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                {{-- Password --}}
+                <div>
+                    <label class="block text-sm font-semibold mb-1.5" style="color:#1e3a5f">Password</label>
+                    <input type="password" name="password" required
+                           class="w-full px-4 py-3 rounded-lg border text-sm focus:outline-none focus:ring-2 transition
+                                  {{ $errors->has('password') ? 'border-red-500 focus:ring-red-300' : 'border-gray-200 focus:ring-blue-300' }}"
+                           style="background-color:#f1f5f9">
+                    @error('password')
+                        <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                {{-- Submit --}}
+                <button type="submit"
+                        class="w-full py-3 rounded-lg text-white font-bold text-sm tracking-wide transition hover:opacity-90"
+                        style="background-color:#1e3a5f">
+                    Login
+                </button>
+
+           
+
+            </form>
         </div>
+    </div>
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
-
-        <!-- Remember Me -->
-        <div class="block mt-4">
-            <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
-                <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-            </label>
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
-                </a>
-            @endif
-
-            <x-primary-button class="ms-3">
-                {{ __('Log in') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+</body>
+</html>
