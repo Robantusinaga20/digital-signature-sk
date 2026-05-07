@@ -40,7 +40,7 @@
                 </svg>
                 Data Kunci
             </a>
-            <a href="{{ route('sk.index') }}"
+            <a href="{{ route('kunci.index') }}"
                class="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition
                       {{ request()->routeIs('sk.*') ? 'bg-white text-blue-900' : 'text-blue-100 hover:bg-blue-800' }}">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
