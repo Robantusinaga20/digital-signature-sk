@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\KunciController;
+use App\Http\Controllers\SkPenugasanController;
 
 // =====================
 // HALAMAN PUBLIK
@@ -40,7 +41,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/kunci',            [KunciController::class, 'index'])->name('kunci.index');
     Route::get('/kunci/generate',   [KunciController::class, 'generate'])->name('kunci.generate');
     Route::post('/kunci',           [KunciController::class, 'store'])->name('kunci.store');
-    Route::delete('/kunci/{id}',    [KunciController::class, 'destroy'])->name('kunci.destroy');    
+    Route::delete('/kunci/{id}',    [KunciController::class, 'destroy'])->name('kunci.destroy'); 
+     
+    //route data SK
+    Route::get('/sk',            [SkPenugasanController::class, 'index'])->name('sk.index');
+    Route::get('/sk/create',     [SkPenugasanController::class, 'create'])->name('sk.create');
+    Route::post('/sk',           [SkPenugasanController::class, 'store'])->name('sk.store');
+    Route::get('/sk/{id}/edit',  [SkPenugasanController::class, 'edit'])->name('sk.edit');
+    Route::put('/sk/{id}',       [SkPenugasanController::class, 'update'])->name('sk.update');
+    Route::delete('/sk/{id}',    [SkPenugasanController::class, 'destroy'])->name('sk.destroy');
+    Route::get('/sk/{id}/file',  [SkPenugasanController::class, 'viewFile'])->name('sk.file');
     // Placeholder — akan diisi di phase berikutnya
     Route::get('/tanda-tangan', fn() => abort(404))->name('tanda-tangan.index');
 });

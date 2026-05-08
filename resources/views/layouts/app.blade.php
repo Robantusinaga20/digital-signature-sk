@@ -40,7 +40,7 @@
                 </svg>
                 Data Kunci
             </a>
-            <a href="{{ route('kunci.index') }}"
+            <a href="{{ route('sk.index') }}"
                class="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition
                       {{ request()->routeIs('sk.*') ? 'bg-white text-blue-900' : 'text-blue-100 hover:bg-blue-800' }}">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -97,14 +97,61 @@
         <main class="flex-1 p-8 bg-gray-50">
             {{-- Alert success --}}
             @if(session('success'))
-            <div class="mb-4 px-4 py-3 rounded-lg text-sm font-medium text-white" style="background-color:#1e3a5f">
-                {{ session('success') }}
+            <div id="alert-success"
+                 class="mb-4 flex items-center justify-between gap-3 px-4 py-3 rounded-lg text-sm font-medium text-white transition-all duration-500"
+                 style="background-color:#1e3a5f">
+                <div class="flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                    </svg>
+                    <span>{{ session('success') }}</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    {{-- Progress bar --}}
+                    <div class="w-16 h-1 rounded-full bg-white bg-opacity-30 overflow-hidden">
+                        <div id="progress-success"
+                             class="h-full rounded-full bg-white transition-all ease-linear"
+                             style="width:100%">
+                        </div>
+                    </div>
+                    {{-- Tombol close --}}
+                    <button onclick="dismissAlert('success')"
+                            class="flex-shrink-0 hover:opacity-70 transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
             </div>
             @endif
+
             {{-- Alert error --}}
             @if(session('error'))
-            <div class="mb-4 px-4 py-3 rounded-lg text-sm font-medium text-white" style="background-color:#9b1c1c">
-                {{ session('error') }}
+            <div id="alert-error"
+                 class="mb-4 flex items-center justify-between gap-3 px-4 py-3 rounded-lg text-sm font-medium text-white transition-all duration-500"
+                 style="background-color:#9b1c1c">
+                <div class="flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <span>{{ session('error') }}</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    {{-- Progress bar --}}
+                    <div class="w-16 h-1 rounded-full bg-white bg-opacity-30 overflow-hidden">
+                        <div id="progress-error"
+                             class="h-full rounded-full bg-white transition-all ease-linear"
+                             style="width:100%">
+                        </div>
+                    </div>
+                    {{-- Tombol close --}}
+                    <button onclick="dismissAlert('error')"
+                            class="flex-shrink-0 hover:opacity-70 transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
             </div>
             @endif
 
@@ -113,5 +160,41 @@
     </div>
 
 </div>
+<script>
+function dismissAlert(type) {
+    const alert = document.getElementById('alert-' + type);
+    if (!alert) return;
+
+    // Fade out
+    alert.style.opacity    = '0';
+    alert.style.transform  = 'translateY(-8px)';
+    alert.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+
+    setTimeout(() => alert.remove(), 400);
+}
+
+function autoAlert(type, duration) {
+    const alert    = document.getElementById('alert-' + type);
+    const progress = document.getElementById('progress-' + type);
+    if (!alert) return;
+
+    // Jalankan progress bar
+    setTimeout(() => {
+        if (progress) {
+            progress.style.transitionDuration = duration + 'ms';
+            progress.style.width = '0%';
+        }
+    }, 100);
+
+    // Auto dismiss setelah duration
+    setTimeout(() => dismissAlert(type), duration);
+}
+
+// Jalankan saat halaman load — 4 detik
+document.addEventListener('DOMContentLoaded', () => {
+    autoAlert('success', 4000);
+    autoAlert('error', 4000);
+});
+</script>
 </body>
 </html>
