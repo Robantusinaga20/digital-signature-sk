@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\SkPenugasan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Smalot\PdfParser\Parser;
 
 class SkPenugasanController extends Controller
 {
@@ -32,6 +33,14 @@ class SkPenugasanController extends Controller
             'sk_file.max'      => 'Ukuran file maksimal 5MB.',
         ]);
 
+        // Validasi jumlah halaman PDF — hanya boleh 1 halaman
+        $tempPath = $request->file('sk_file')->getRealPath();
+        if (!$this->validatePdfPages($tempPath)) {
+            return back()
+                ->withInput()
+                ->withErrors(['sk_file' => 'File PDF hanya boleh terdiri dari 1 halaman.']);
+        }
+
         $path = $request->file('sk_file')->store('sk_files', 'public');
 
         SkPenugasan::create([
@@ -43,7 +52,7 @@ class SkPenugasanController extends Controller
         ]);
 
         return redirect()->route('sk.index')
-                         ->with('success', 'Data SK berhasil ditambahkan.');
+                        ->with('success', 'Data SK berhasil ditambahkan.');
     }
 
     public function edit($id)
@@ -67,6 +76,19 @@ class SkPenugasanController extends Controller
             'sk_file.max'   => 'Ukuran file maksimal 5MB.',
         ]);
 
+        // Validasi jumlah halaman jika ada file baru
+        if ($request->hasFile('sk_file')) {
+            $tempPath = $request->file('sk_file')->getRealPath();
+            if (!$this->validatePdfPages($tempPath)) {
+                return back()
+                    ->withInput()
+                    ->withErrors(['sk_file' => 'File PDF hanya boleh terdiri dari 1 halaman.']);
+            }
+
+            Storage::disk('public')->delete($sk->sk_path);
+            $data['sk_path'] = $request->file('sk_file')->store('sk_files', 'public');
+        }
+
         $data = [
             'nomor_sk'   => $request->nomor_sk,
             'tanggal_sk' => $request->tanggal_sk,
@@ -87,17 +109,32 @@ class SkPenugasanController extends Controller
 
     public function destroy($id)
     {
-        $sk = SkPenugasan::findOrFail($id);
+        $sk = SkPenugasan::with('tandaTangan')->findOrFail($id);
 
+        // Jika sudah ditandatangani — hapus data tanda tangan dulu
         if ($sk->tandaTangan) {
-            return back()->with('error', 'SK tidak dapat dihapus karena sudah ditandatangani.');
+            // Hapus file QR Code
+            Storage::disk('public')->delete($sk->tandaTangan->qr_path);
+
+            // Hapus record tanda tangan
+            $sk->tandaTangan->delete();
+
+            // Hapus file PDF signed
+            Storage::disk('public')->delete($sk->sk_path);
+
+            // Hapus file PDF asli
+            if ($sk->original_sk_path) {
+                Storage::disk('public')->delete($sk->original_sk_path);
+            }
+        } else {
+            // Belum ditandatangani — hapus file PDF asli saja
+            Storage::disk('public')->delete($sk->sk_path);
         }
 
-        Storage::disk('public')->delete($sk->sk_path);
         $sk->delete();
 
         return redirect()->route('sk.index')
-                         ->with('success', 'Data SK berhasil dihapus.');
+                        ->with('success', 'Data SK berhasil dihapus.');
     }
 
     public function viewFile($id)
@@ -111,4 +148,15 @@ class SkPenugasanController extends Controller
 
         return response()->file($path, ['Content-Type' => 'application/pdf']);
     }
-}
+    private function validatePdfPages(string $filePath): bool
+    {
+        try {
+            $parser  = new Parser();
+            $pdf     = $parser->parseFile($filePath);
+            $pages   = $pdf->getPages();
+            return count($pages) === 1;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+    }

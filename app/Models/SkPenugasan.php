@@ -19,8 +19,8 @@ class SkPenugasan extends Model
         'tanggal_sk' => 'date',
     ];
 
-    // public function tandaTangan()
-    // {
-    //     return $this->hasOne(TandaTangan::class, 'id_sk', 'id_sk');
-    // }
+    public function tandaTangan()
+    {
+        return $this->hasOne(TandaTangan::class, 'id_sk', 'id_sk');
+    }
 }

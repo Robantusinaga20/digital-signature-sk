@@ -2,7 +2,7 @@
 @section('page-title', 'Data Kunci')
 
 @section('content')
-<p class="text-sm text-gray-500 mb-6">Bangkitkan pasangan kunci untuk menandatangani SK.</p>
+<p class="text-sm text-gray-500 mb-6">Bangkitkan Pasangan Kunci Untuk Menandatangani SK.</p>
 
 <div class="max-w-2xl">
     <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">

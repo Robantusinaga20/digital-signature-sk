@@ -11,7 +11,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        //Paksa QrCode pakai SVG renderer (tidak butuh Imagick/GD)
+    $this->app->bind('qrcode', function () {
+        return new \SimpleSoftwareIO\QrCode\Generator;
+    });
     }
 
     /**

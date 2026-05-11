@@ -9,8 +9,8 @@ class Kunci extends Model
     protected $primaryKey = 'id_kunci';
     protected $fillable   = ['n', 'e', 'd'];
 
-    // public function tandaTangan()
-    // {
-    //     return $this->hasMany(TandaTangan::class, 'id_kunci', 'id_kunci');
-    // }
+    public function tandaTangan()
+    {
+        return $this->hasMany(TandaTangan::class, 'id_kunci', 'id_kunci');
+    }
 }

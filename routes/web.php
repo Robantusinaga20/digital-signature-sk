@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\KunciController;
 use App\Http\Controllers\SkPenugasanController;
+ use App\Http\Controllers\TandaTanganController;
+ use App\Http\Controllers\VerifikasiController;
 
 // =====================
 // HALAMAN PUBLIK
@@ -11,6 +13,10 @@ use App\Http\Controllers\SkPenugasanController;
 Route::get('/', function () {
     return view('verifikasi.index');
 })->name('verifikasi');
+// Di luar middleware auth (publik)
+Route::get('/verifikasi/cek/{token}', function($token) {
+    return redirect()->route('verifikasi')->with('token', $token);
+})->name('verifikasi.cek');
 
 // =====================
 // AUTH (Breeze)
@@ -51,6 +57,16 @@ Route::middleware('auth')->group(function () {
     Route::put('/sk/{id}',       [SkPenugasanController::class, 'update'])->name('sk.update');
     Route::delete('/sk/{id}',    [SkPenugasanController::class, 'destroy'])->name('sk.destroy');
     Route::get('/sk/{id}/file',  [SkPenugasanController::class, 'viewFile'])->name('sk.file');
-    // Placeholder — akan diisi di phase berikutnya
-    Route::get('/tanda-tangan', fn() => abort(404))->name('tanda-tangan.index');
+
+
+    // route tanda tangan
+    Route::get('/tanda-tangan',              [TandaTanganController::class, 'index'])->name('tanda-tangan.index');
+    Route::post('/tanda-tangan/sign/{id_sk}',[TandaTanganController::class, 'sign'])->name('tanda-tangan.sign');
+    Route::get('/tanda-tangan/{id_tt}',      [TandaTanganController::class, 'detail'])->name('tanda-tangan.detail');
+    Route::get('/tanda-tangan/{id_tt}/download', [TandaTanganController::class, 'download'])->name('tanda-tangan.download');
+    Route::get('/tanda-tangan/{id_tt}/download-qr', [TandaTanganController::class, 'downloadQr'])->name('tanda-tangan.download-qr');
+
+    // Halaman publik
+    Route::get('/', [VerifikasiController::class, 'index'])->name('verifikasi');
+    Route::get('/verifikasi/cek/{token}', [VerifikasiController::class, 'cek'])->name('verifikasi.cek');
 });
