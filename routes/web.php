@@ -7,16 +7,28 @@ use App\Http\Controllers\SkPenugasanController;
  use App\Http\Controllers\TandaTanganController;
  use App\Http\Controllers\VerifikasiController;
 
-// =====================
+// // =====================
 // HALAMAN PUBLIK
 // =====================
-Route::get('/', function () {
-    return view('verifikasi.index');
-})->name('verifikasi');
-// Di luar middleware auth (publik)
-Route::get('/verifikasi/cek/{token}', function($token) {
-    return redirect()->route('verifikasi')->with('token', $token);
-})->name('verifikasi.cek');
+// Route::get('/', function () {
+//     return view('verifikasi.index');
+// })->name('verifikasi');
+// // Di luar middleware auth (publik)
+// Route::get('/verifikasi/cek/{token}', function($token) {
+//     return redirect()->route('verifikasi')->with('token', $token);
+// })->name('verifikasi.cek');
+
+// Halaman publik
+    Route::get('/', [VerifikasiController::class, 'index'])->name('verifikasi');
+    Route::get('/verifikasi/cek/{token}', [VerifikasiController::class, 'cek'])->name('verifikasi.cek');
+    Route::post('/verifikasi/proses', [VerifikasiController::class, 'proses'])->name('verifikasi.proses');
+    Route::get('/verifikasi/token', function(\Illuminate\Http\Request $request) {
+    $token = trim($request->get('token', ''));
+    if (empty($token)) {
+        return redirect()->route('verifikasi');
+    }
+    return redirect()->route('verifikasi.cek', ['token' => $token]);
+})->name('verifikasi.token');
 
 // =====================
 // AUTH (Breeze)
@@ -24,18 +36,16 @@ Route::get('/verifikasi/cek/{token}', function($token) {
 require __DIR__.'/auth.php';
 
 
-// Blokir akses register dari publik
-Route::get('/register', fn() => redirect()->route('login'))->name('register');
-Route::post('/register', fn() => redirect()->route('login'));
+    // Blokir akses register dari publik
+    Route::get('/register', fn() => redirect()->route('login'))->name('register');
+    Route::post('/register', fn() => redirect()->route('login'));
 
-// =====================
-// HALAMAN ADMIN (butuh login)
-// =====================
+    // =====================
+    // HALAMAN ADMIN (butuh login)
+    // =====================
 Route::middleware('auth')->group(function () {
 
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
 
     // Users (kelola akun)
     Route::get('/users',            [UserController::class, 'index'])->name('users.index');
@@ -65,8 +75,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/tanda-tangan/{id_tt}',      [TandaTanganController::class, 'detail'])->name('tanda-tangan.detail');
     Route::get('/tanda-tangan/{id_tt}/download', [TandaTanganController::class, 'download'])->name('tanda-tangan.download');
     Route::get('/tanda-tangan/{id_tt}/download-qr', [TandaTanganController::class, 'downloadQr'])->name('tanda-tangan.download-qr');
-
-    // Halaman publik
-    Route::get('/', [VerifikasiController::class, 'index'])->name('verifikasi');
-    Route::get('/verifikasi/cek/{token}', [VerifikasiController::class, 'cek'])->name('verifikasi.cek');
-});
+    
+}
+);

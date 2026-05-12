@@ -40,17 +40,20 @@
                     <div class="flex items-center justify-center gap-2">
                         @if(!$sk->tandaTangan)
                             {{-- Belum ditandatangani --}}
-                            <form method="POST"
-                                action="{{ route('tanda-tangan.sign', $sk->id_sk) }}"
-                                onsubmit="return confirm('Tandatangani SK {{ $sk->nomor_sk }}?')">
-                                @csrf
-                                <button type="submit"
-                                        class="px-3 py-1.5 rounded-lg text-white text-xs
-                                            font-semibold transition hover:opacity-90"
-                                        style="background-color:#9b1c1c">
-                                    Sign
-                                </button>
-                            </form>
+                         <form id="sign-sk-{{ $sk->id_sk }}" method="POST"
+                            action="{{ route('tanda-tangan.sign', $sk->id_sk) }}">
+                            @csrf
+                            <button type="button"
+                                    onclick="bukaModalSign(
+                                        'sign-sk-{{ $sk->id_sk }}',
+                                        'Tandatangani SK {{ $sk->nomor_sk }}? Proses ini tidak dapat dibatalkan.'
+                                    )"
+                                    class="px-3 py-1.5 rounded-lg text-white text-xs font-semibold
+                                        transition hover:opacity-90"
+                                    style="background-color:#9b1c1c">
+                                Sign
+                            </button>
+                        </form>
                         @else
                             {{-- Sudah ditandatangani: hanya Detail --}}
                             <a href="{{ route('tanda-tangan.detail', $sk->tandaTangan->id_tt) }}"

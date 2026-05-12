@@ -160,41 +160,119 @@
     </div>
 
 </div>
+
+{{-- Modal Konfirmasi Hapus --}}
+{{-- Modal Konfirmasi Hapus --}}
+<div id="modal-hapus" class="fixed inset-0 z-50 hidden items-center justify-center"
+     style="background:rgba(0,0,0,0.4); display:none">
+    <div class="bg-white rounded-2xl shadow-xl mx-4 overflow-hidden"
+         style="width:100%; max-width:360px">
+
+        {{-- Body --}}
+        <div class="flex items-start gap-3 px-5 py-5">
+            <div class="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"
+                 style="background-color:#fde8e8">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" style="color:#9b1c1c"
+                     fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0
+                             01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1
+                             1 0 00-1 1v3M4 7h16"/>
+                </svg>
+            </div>
+            <div>
+                <p class="font-bold text-gray-800 text-sm">Konfirmasi Hapus</p>
+                <p class="text-xs text-gray-500 mt-1 leading-relaxed" id="modal-pesan">
+                    Apakah Anda yakin ingin menghapus data ini?
+                </p>
+            </div>
+        </div>
+
+        {{-- Footer --}}
+        <div class="flex border-t border-gray-100">
+            <button onclick="tutupModal()"
+                    class="flex-1 py-2.5 text-xs font-semibold text-gray-600
+                           hover:bg-gray-50 transition">
+                Batal
+            </button>
+            <div class="w-px bg-gray-100"></div>
+            <button id="modal-confirm-btn" onclick="konfirmasiHapus()"
+                    class="flex-1 py-2.5 text-xs font-bold text-white transition hover:opacity-90"
+                    style="background-color:#9b1c1c">
+                Hapus
+            </button>
+        </div>
+    </div>
+</div>
+
 <script>
-function dismissAlert(type) {
-    const alert = document.getElementById('alert-' + type);
-    if (!alert) return;
+        function dismissAlert(type) {
+            const alert = document.getElementById('alert-' + type);
+            if (!alert) return;
 
-    // Fade out
-    alert.style.opacity    = '0';
-    alert.style.transform  = 'translateY(-8px)';
-    alert.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+            // Fade out
+            alert.style.opacity    = '0';
+            alert.style.transform  = 'translateY(-8px)';
+            alert.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
 
-    setTimeout(() => alert.remove(), 400);
-}
-
-function autoAlert(type, duration) {
-    const alert    = document.getElementById('alert-' + type);
-    const progress = document.getElementById('progress-' + type);
-    if (!alert) return;
-
-    // Jalankan progress bar
-    setTimeout(() => {
-        if (progress) {
-            progress.style.transitionDuration = duration + 'ms';
-            progress.style.width = '0%';
+            setTimeout(() => alert.remove(), 400);
         }
-    }, 100);
 
-    // Auto dismiss setelah duration
-    setTimeout(() => dismissAlert(type), duration);
-}
+        function autoAlert(type, duration) {
+            const alert    = document.getElementById('alert-' + type);
+            const progress = document.getElementById('progress-' + type);
+            if (!alert) return;
 
-// Jalankan saat halaman load — 4 detik
-document.addEventListener('DOMContentLoaded', () => {
-    autoAlert('success', 4000);
-    autoAlert('error', 4000);
-});
+            // Jalankan progress bar
+            setTimeout(() => {
+                if (progress) {
+                    progress.style.transitionDuration = duration + 'ms';
+                    progress.style.width = '0%';
+                }
+            }, 100);
+
+            // Auto dismiss setelah duration
+            setTimeout(() => dismissAlert(type), duration);
+        }
+
+        // Jalankan saat halaman load — 4 detik
+        document.addEventListener('DOMContentLoaded', () => {
+            autoAlert('success', 4000);
+            autoAlert('error', 4000);
+        });
+
+            let formToSubmit = null;
+        function bukaModa(formId, pesan) {
+            formToSubmit = document.getElementById(formId);
+            document.getElementById('modal-pesan').textContent = pesan;
+            document.getElementById('modal-confirm-btn').textContent = 'Hapus';
+            document.getElementById('modal-confirm-btn').style.backgroundColor = '#9b1c1c';
+            document.getElementById('modal-hapus').style.display = 'flex';
+        }
+
+        function bukaModalSign(formId, pesan) {
+            formToSubmit = document.getElementById(formId);
+            document.getElementById('modal-pesan').textContent = pesan;
+            document.getElementById('modal-confirm-btn').textContent = 'Tandatangani';
+            document.getElementById('modal-confirm-btn').style.backgroundColor = '#1e3a5f';
+            document.getElementById('modal-hapus').style.display = 'flex';
+        }
+
+        function tutupModal() {
+            document.getElementById('modal-hapus').style.display = 'none';
+            formToSubmit = null;
+        }
+
+        function konfirmasiHapus() {
+            if (formToSubmit) formToSubmit.submit();
+            tutupModal();
+        }
+
+        // Tutup modal klik background
+        document.getElementById('modal-hapus').addEventListener('click', function(e) {
+            if (e.target === this) tutupModal();
+        });
+    
 </script>
 </body>
 </html>

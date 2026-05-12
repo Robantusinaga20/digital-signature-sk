@@ -61,21 +61,23 @@
                         </a>
                         @endif
 
-                        {{-- Hapus: selalu bisa diklik --}}
-                        <form method="POST" action="{{ route('sk.destroy', $sk->id_sk) }}"
-                            onsubmit="return confirm(
-                                '{{ $sk->tandaTangan
-                                    ? 'SK ini sudah ditandatangani. Menghapus SK akan menghapus tanda tangan juga. Lanjutkan?'
-                                    : 'Hapus SK ' . $sk->nomor_sk . '?' }}'
-                            )">
-                            @csrf @method('DELETE')
-                            <button type="submit"
-                                    class="px-3 py-1.5 rounded-lg text-white text-xs
-                                        font-semibold transition hover:opacity-90"
-                                    style="background-color:#9b1c1c">
-                                Hapus
-                            </button>
-                        </form>
+                        {{-- Hapus SK belum TTD --}}
+            <form id="hapus-sk-{{ $sk->id_sk }}" method="POST"
+                action="{{ route('sk.destroy', $sk->id_sk) }}">
+                @csrf @method('DELETE')
+                <button type="button"
+                        onclick="bukaModa(
+                            'hapus-sk-{{ $sk->id_sk }}',
+                            '{{ $sk->tandaTangan
+                                ? 'SK ini sudah ditandatangani. Menghapus SK akan menghapus tanda tangan juga. Lanjutkan?'
+                                : 'Hapus SK ' . $sk->nomor_sk . '? Tindakan ini tidak dapat dibatalkan.' }}'
+                        )"
+                        class="px-3 py-1.5 rounded-lg text-white text-xs font-semibold
+                            transition hover:opacity-90"
+                        style="background-color:#9b1c1c">
+                    Hapus
+                </button>
+            </form>
 
                     </div>
                 </td>
