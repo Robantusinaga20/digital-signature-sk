@@ -11,7 +11,8 @@
 
     {{-- Total SK --}}
     <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-5 flex items-center gap-4">
-        <div class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0
+        shadow-sm hover:shadow-md transition hover:-translate-y-0.5"
              style="background-color:#e8f0fb">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" style="color:#1e3a5f"
                  fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -28,7 +29,8 @@
 
     {{-- Sudah TTD --}}
     <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-5 flex items-center gap-4">
-        <div class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0
+        shadow-sm hover:shadow-md transition hover:-translate-y-0.5"
              style="background-color:#dcfce7">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-green-600"
                  fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -44,7 +46,8 @@
 
     {{-- Belum TTD --}}
     <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-5 flex items-center gap-4">
-        <div class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0
+        shadow-sm hover:shadow-md transition hover:-translate-y-0.5"
              style="background-color:#fde8e8">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" style="color:#9b1c1c"
                  fill="none" viewBox="0 0 24 24" stroke="currentColor">

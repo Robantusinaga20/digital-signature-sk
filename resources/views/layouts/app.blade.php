@@ -156,7 +156,13 @@
             @endif
 
             @yield('content')
+
+
         </main>
+                        {{-- Footer --}}
+    <footer class="text-center py-4 text-xs" style="color:#94a3b8">
+        PKBM HANUBA &copy; {{ date('Y') }} — Sistem Digital Signature SK Penugasan
+    </footer>
     </div>
 
 </div>

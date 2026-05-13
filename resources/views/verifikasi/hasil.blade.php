@@ -8,14 +8,25 @@
 </head>
 <body class="min-h-screen flex flex-col bg-gray-50">
 
-    {{-- Header --}}
-    <header class="flex items-center justify-between px-8 py-4 bg-white border-b border-gray-200">
-        <span class="font-black text-sm tracking-wide" style="color:#1e3a5f">
-            APLIKASI DIGITAL SIGNATURE SK PENUGASAN
-        </span>
+{{-- Header --}}
+    <header class="flex items-center justify-between px-8 py-4 border-b border-gray-200 shadow-sm" style="background-color:#1e3a5f">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
+                 style="background-color:#ffffff">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" style="color:#1e3a5f"
+                     viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0
+                             01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
+            </div>
+            <span class="font-black text-sm tracking-wide" style="color:#ffffff">
+                APLIKASI DIGITAL SIGNATURE SK PENUGASAN
+            </span>
+        </div>
         <a href="{{ route('login') }}"
-           class="px-5 py-2 rounded-lg text-sm font-bold text-white transition hover:opacity-90"
-           style="background-color:#1e3a5f">
+           class="px-5 py-2 rounded-lg text-sm font-bold text-primary transition hover:opacity-90 shadow-sm"
+           style="background-color:#ffffff">
             Login
         </a>
     </header>
@@ -28,7 +39,7 @@
             <div class="flex justify-center mb-6">
                 @if($valid)
                 <div class="flex items-center gap-3 px-6 py-3 rounded-full text-white font-bold text-sm shadow"
-                     style="background-color:#1e3a5f">
+                     style="background-color:#0d9624">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none"
                          viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
@@ -135,6 +146,11 @@
 
         </div>
     </div>
+
+        {{-- Footer --}}
+    <footer class="text-center py-4 text-xs" style="color:#94a3b8">
+        PKBM HANUBA &copy; {{ date('Y') }} — Sistem Digital Signature SK Penugasan
+    </footer>
 
 </body>
 </html>

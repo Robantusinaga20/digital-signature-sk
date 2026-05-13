@@ -53,8 +53,9 @@ class TandaTanganController extends Controller
         $encrypted       = $this->rsa->encrypt($plaintext, $kunci->d, $kunci->n);
         $ciphertextStore = $this->rsa->serializeCipher($encrypted);
 
-        // Generate token verifikasi unik
-        $token = hash('sha256', $sk->id_sk . $plaintext . now());
+      // Token diambil dari id_sk + hex enkripsi karakter pertama plaintext
+        // Ini lahir langsung dari proses RSA — konsisten dengan bab 3
+        $token = $sk->id_sk . '-' . strtolower($encrypted[0]['hex']);
 
         // URL verifikasi publik
         $verifyUrl = route('verifikasi.cek', ['token' => $token]);

@@ -51,10 +51,15 @@
         </div>
         <div class="bg-gray-50 px-5 py-5 flex items-center gap-6">
             <img src="{{ Storage::url($tt->qr_path) }}"
-                 alt="QR Code" class="w-28 h-28 border border-gray-200 rounded-lg p-1 bg-white">
+                 alt="QR Code" class="w-28 h-28 border border-gray-200 rounded-lg p-1 bg-white flex-shrink-0">
             <div class="text-xs text-gray-500 leading-relaxed">
                 <p class="font-semibold text-gray-700 mb-1">URL Verifikasi:</p>
-                <p class="font-mono break-all">{{ route('verifikasi.cek', ['token' => hash('sha256', $tt->id_sk . $tt->plaintext . $tt->created_at)]) }}</p>
+                <a href="{{ route('verifikasi.cek', ['token' => $tt->token]) }}"
+                   target="_blank"
+                   class="font-mono break-all hover:underline"
+                   style="color:#1e3a5f">
+                    {{ route('verifikasi.cek', ['token' => $tt->token]) }}
+                </a>
             </div>
         </div>
     </div>
